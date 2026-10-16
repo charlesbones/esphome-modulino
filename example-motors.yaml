@@ -1,0 +1,67 @@
+# Modulino Motors example. The node is dual-mode: either two DC channels OR one
+# stepper (mutually exclusive). Attaching a `stepper` platform switches the hub
+# into stepper mode — so for DC use, delete the `stepper:` block (and vice versa).
+esphome:
+  name: modulino-motors
+  friendly_name: Modulino Motors
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+
+ota:
+  - platform: esphome
+
+logger:
+
+modulino_motors:
+  id: motors1
+  decay: fast
+  pwm_frequency: 20000
+  update_interval: 1s   # how often current / busy telemetry is published
+
+# --- DC mode: two speed numbers (-100..100 %) + per-channel current ---
+number:
+  - platform: modulino_motors
+    modulino_motors_id: motors1
+    channel: a
+    name: "Motor A Speed"
+  - platform: modulino_motors
+    modulino_motors_id: motors1
+    channel: b
+    name: "Motor B Speed"
+
+sensor:
+  - platform: modulino_motors
+    modulino_motors_id: motors1
+    channel: a
+    name: "Motor A Current"
+  - platform: modulino_motors
+    modulino_motors_id: motors1
+    channel: b
+    name: "Motor B Current"
+
+binary_sensor:
+  - platform: modulino_motors
+    modulino_motors_id: motors1
+    name: "Motors Busy"
+
+# --- Stepper mode: delete the DC blocks above and keep this ---
+# stepper:
+#   - platform: modulino_motors
+#     id: motor_stepper
+#     modulino_motors_id: motors1
+#     max_speed: 250 steps/s

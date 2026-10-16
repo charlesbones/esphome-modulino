@@ -1,0 +1,21 @@
+{
+  "name": "Arduino_Modulino",
+  "version": "0.10.0",
+  "description": "Arduino Library for Modulinos (vendored for ESPHome with an explicit dependency graph)",
+  "keywords": "modulino, qwiic, i2c",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arduino-libraries/Arduino_Modulino.git"
+  },
+  "frameworks": "arduino",
+  "platforms": "*",
+  "dependencies": [
+    { "name": "STM32duino VL53L4CD", "version": "1.0.5" },
+    { "name": "STM32duino VL53L4ED", "version": "1.0.1" },
+    { "name": "Arduino_LSM6DSOX", "version": "1.1.2" },
+    { "name": "Arduino_LPS22HB", "version": "1.0.3" },
+    { "name": "Arduino_HS300x", "version": "1.0.1" },
+    { "name": "Arduino_LTR381RGB", "version": "1.0.1" },
+    { "name": "SHT31", "version": "0.5.3" }
+  ]
+}

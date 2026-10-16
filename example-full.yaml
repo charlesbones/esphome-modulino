@@ -1,0 +1,108 @@
+# Reference config wiring up every readable/controllable Modulino node at once.
+# Copy just the blocks for the nodes you actually have. Motors are shown
+# separately in example-motors.yaml (DC and stepper are mutually exclusive).
+esphome:
+  name: modulino-full
+  friendly_name: Modulino Full
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+
+ota:
+  - platform: esphome
+
+logger:
+
+# Hub components (shared I2C instance for their sensor + binary_sensor platforms).
+# Interactive inputs poll fast so presses/rotation feel responsive.
+modulino_knob:
+  id: knob1
+  update_interval: 250ms
+modulino_joystick:
+  id: joystick1
+  update_interval: 250ms
+
+sensor:
+  - platform: modulino_thermo
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+  - platform: modulino_light
+    illuminance:
+      name: "Illuminance"
+    ir:
+      name: "IR"
+    red:
+      name: "Red"
+    green:
+      name: "Green"
+    blue:
+      name: "Blue"
+  - platform: modulino_movement
+    acceleration_x:
+      name: "Accel X"
+    acceleration_y:
+      name: "Accel Y"
+    acceleration_z:
+      name: "Accel Z"
+    gyroscope_x:
+      name: "Gyro X"
+    gyroscope_y:
+      name: "Gyro Y"
+    gyroscope_z:
+      name: "Gyro Z"
+  - platform: modulino_distance
+    name: "Distance"
+  - platform: modulino_knob
+    modulino_knob_id: knob1
+    name: "Knob Position"
+  - platform: modulino_joystick
+    modulino_joystick_id: joystick1
+    x:
+      name: "Joystick X"
+    y:
+      name: "Joystick Y"
+
+binary_sensor:
+  - platform: modulino_knob
+    modulino_knob_id: knob1
+    name: "Knob Button"
+  - platform: modulino_joystick
+    modulino_joystick_id: joystick1
+    name: "Joystick Button"
+  - platform: modulino_buttons
+    update_interval: 250ms
+    button_a:
+      name: "Button A"
+    button_b:
+      name: "Button B"
+    button_c:
+      name: "Button C"
+
+light:
+  - platform: modulino_pixels
+    name: "Modulino Pixels"
+
+switch:
+  - platform: modulino_buzzer
+    name: "Buzzer"
+    frequency: 440
+  - platform: modulino_vibro
+    name: "Vibro"
+  - platform: modulino_latch_relay
+    name: "Latch Relay"

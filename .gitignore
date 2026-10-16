@@ -1,0 +1,13 @@
+# ESPHome build output
+.esphome/
+*.bin
+
+# Local secrets (copy secrets.yaml.example -> secrets.yaml)
+secrets.yaml
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
