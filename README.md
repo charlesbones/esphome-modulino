@@ -28,6 +28,8 @@ The example configs:
   Home Assistant lights via `partition`, plus addressable effects).
 - `example-vibro.yaml` — Vibro with intensity (strength) and duration (length)
   number controls.
+- `example-led-matrix.yaml` — LED Matrix as a display: draw, scroll text from a
+  Home Assistant text box, or play an animation picked from a select.
 
 ## Use it in your own project
 
@@ -75,6 +77,9 @@ sensor:
 - `modulino_motors` — dual-mode H-bridge: two DC channels (`number` speed +
   `sensor` current + `binary_sensor` busy) **or** one stepper (native ESPHome
   `stepper` domain). The two modes are mutually exclusive.
+- `modulino_led_matrix` — `display`: 12x8 monochrome matrix. Draw with a display
+  lambda; scroll text or play animations by combining it with stock ESPHome
+  `text`/`select` inputs (see `example-led-matrix.yaml`).
 
 Not implemented: `modulino_opto_relay`.
 
@@ -128,6 +133,12 @@ every wrapper:
 Each wrapper component calls `add_modulino_base()` in its `to_code()` and follows
 a standard ESPHome platform pattern (single polling component, hub + platforms,
 `AddressableLight`, or `switch`).
+
+The vendored copy is kept **unmodified** from upstream so it stays easy to update:
+to pull a new `Arduino_Modulino` release, replace
+`components/modulino/Arduino_Modulino/src/` (and `library.properties`) with the
+new version and keep our added `library.json`. No source patches to re-apply —
+the wrapper components work around upstream quirks in their own code.
 
 ## License
 

@@ -23,12 +23,14 @@ void ModulinoButtonsComponent::update() {
     if (!found_) return;
     ESP_LOGI(TAG, "Modulino Buttons found");
   }
-  // update() refreshes the cached button states (its bool return only signals
-  // whether anything changed since the last poll).
-  buttons_.update();
-  if (button_a_ != nullptr) button_a_->publish_state(buttons_.isPressed(0) != 0);
-  if (button_b_ != nullptr) button_b_->publish_state(buttons_.isPressed(1) != 0);
-  if (button_c_ != nullptr) button_c_->publish_state(buttons_.isPressed(2) != 0);
+  // Read the three button bytes directly. The library's update() copies an
+  // uninitialized buffer into its state on a failed read (publishing phantom
+  // presses), so we skip a failed read instead.
+  uint8_t buf[3];
+  if (!buttons_.read(buf, 3)) return;
+  if (button_a_ != nullptr) button_a_->publish_state(buf[0] != 0);
+  if (button_b_ != nullptr) button_b_->publish_state(buf[1] != 0);
+  if (button_c_ != nullptr) button_c_->publish_state(buf[2] != 0);
 }
 
 void ModulinoButtonsComponent::dump_config() {

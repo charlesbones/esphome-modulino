@@ -1,0 +1,89 @@
+# Modulino LED Matrix (12x8 monochrome) as an ESPHome display, showing all three
+# ways to drive it from one lambda:
+#   * draw (shapes) — the default when no animation/text is set;
+#   * an animation picked from a Home Assistant select;
+#   * text typed in a Home Assistant text box, scrolled across the matrix.
+# The display is the only custom component; the text/select inputs are stock
+# ESPHome, so there is no custom animation/text code to maintain.
+esphome:
+  name: modulino-led-matrix
+  friendly_name: Modulino LED Matrix
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+  encryption:
+    key: !secret api_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+logger:
+
+# Small font for scrolling text, fetched at build time (needs internet to build).
+font:
+  - file: "gfonts://Roboto"
+    id: matrix_font
+    size: 8
+
+# Home Assistant inputs (stock components) that drive the matrix.
+text:
+  - platform: template
+    name: "Matrix Text"
+    id: matrix_text
+    mode: text
+    optimistic: true
+    initial_value: "HELLO"
+
+select:
+  - platform: template
+    name: "Matrix Animation"
+    id: matrix_anim
+    optimistic: true
+    initial_option: "None"
+    options: ["None", "Blink", "Sweep"]
+
+globals:
+  - id: scroll_x
+    type: int
+    initial_value: "12"
+
+display:
+  - platform: modulino_led_matrix
+    id: matrix
+    update_interval: 120ms
+    lambda: |-
+      // Precedence: a chosen animation wins; else scroll text; else draw a frame.
+      std::string anim = id(matrix_anim).current_option().c_str();
+      if (anim == "Blink") {
+        if ((millis() / 500) % 2 == 0) it.filled_rectangle(0, 0, 12, 8);
+        return;
+      }
+      if (anim == "Sweep") {
+        int col = (millis() / 120) % 12;
+        it.line(col, 0, col, 7);
+        return;
+      }
+      std::string txt = id(matrix_text).state;
+      if (!txt.empty()) {
+        it.printf(id(scroll_x), 0, id(matrix_font), "%s", txt.c_str());
+        id(scroll_x) -= 1;
+        if (id(scroll_x) < -(int) (txt.size() * 7)) id(scroll_x) = 12;  // wrap when scrolled off
+        return;
+      }
+      // Default drawing: a border.
+      it.rectangle(0, 0, 12, 8);
