@@ -12,6 +12,9 @@ from esphome.components.modulino import add_modulino_base
 # automatically when a stepper platform is attached.
 
 CODEOWNERS = ["@arduino-libraries"]
+# The component's header pulls in all of these domains, so load them even when a
+# given config only uses some of the platforms (e.g. DC-only, no stepper).
+AUTO_LOAD = ["binary_sensor", "number", "sensor", "stepper"]
 
 modulino_motors_ns = cg.esphome_ns.namespace("modulino_motors")
 ModulinoMotorsComponent = modulino_motors_ns.class_(

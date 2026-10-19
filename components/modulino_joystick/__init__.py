@@ -9,6 +9,9 @@ from esphome.const import CONF_ID
 # platforms attach to it, so the X/Y/press state is read from one shared poll.
 
 CODEOWNERS = ["@arduino-libraries"]
+# The header pulls in both domains, so an axes-only or button-only config
+# still compiles.
+AUTO_LOAD = ["binary_sensor", "sensor"]
 
 modulino_joystick_ns = cg.esphome_ns.namespace("modulino_joystick")
 ModulinoJoystickComponent = modulino_joystick_ns.class_(

@@ -13,6 +13,9 @@ from esphome.const import CONF_ID
 # independent instances would corrupt.
 
 CODEOWNERS = ["@arduino-libraries"]
+# The header pulls in both domains, so a position-only or button-only config
+# still compiles.
+AUTO_LOAD = ["binary_sensor", "sensor"]
 
 modulino_knob_ns = cg.esphome_ns.namespace("modulino_knob")
 ModulinoKnobComponent = modulino_knob_ns.class_(

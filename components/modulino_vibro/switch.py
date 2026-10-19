@@ -4,14 +4,12 @@ from esphome.components import switch
 
 from esphome.components.modulino import add_modulino_base
 
-from . import modulino_vibro_ns
+from . import ModulinoVibroSwitch
 
-# Wraps Arduino's ModulinoVibro as an on/off switch: ON runs the vibration
-# motor continuously, OFF stops it.
-
-ModulinoVibroSwitch = modulino_vibro_ns.class_(
-    "ModulinoVibroSwitch", switch.Switch, cg.Component
-)
+# Wraps Arduino's ModulinoVibro as an on/off switch. ON runs the motor (at the
+# configured intensity; continuously, or for the configured duration as a
+# single pulse); OFF stops it. Intensity and duration are set via the optional
+# number platform — give this switch an `id:` to attach them.
 
 CONFIG_SCHEMA = switch.switch_schema(ModulinoVibroSwitch).extend(cv.COMPONENT_SCHEMA)
 

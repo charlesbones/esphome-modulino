@@ -1,0 +1,34 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install esphome
+      - run: cp secrets.yaml.example secrets.yaml
+      # Fast gate: schema + codegen for every example.
+      - run: |
+          for f in example-*.yaml; do
+            echo "::group::config $f"
+            esphome config "$f"
+            echo "::endgroup::"
+          done
+      # Cache the ESP32 toolchain/framework between runs so compiles aren't slow.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.esphome
+          key: esphome-build-${{ hashFiles('components/**') }}
+          restore-keys: esphome-build-
+      # C++ gate: `esphome config` does NOT catch compile errors (e.g. a missing
+      # header), so compile the full example plus the DC-only motors example
+      # (which uses a subset of a component's platforms).
+      - run: esphome compile example-full.yaml
+      - run: esphome compile example-motors.yaml

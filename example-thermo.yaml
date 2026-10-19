@@ -21,9 +21,12 @@ wifi:
 
 # Home Assistant native API (auto-discovers the entities below).
 api:
+  encryption:
+    key: !secret api_key
 
 ota:
   - platform: esphome
+    password: !secret ota_password
 
 logger:
 

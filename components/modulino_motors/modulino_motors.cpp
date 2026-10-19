@@ -32,6 +32,7 @@ void ModulinoMotorsComponent::update() {
     if (!found_) return;
     ESP_LOGI(TAG, "Modulino Motors found");
     apply_settings_();
+    motors_.setDcSpeedRaw(raw_a_, raw_b_);  // apply speeds set before the node appeared
   }
   if (!motors_.update()) return;
   if (current_a_sensor_ != nullptr) {

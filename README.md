@@ -24,6 +24,10 @@ The example configs:
 - `example-thermo.yaml` — minimal, one Thermo node (good starting point).
 - `example-full.yaml` — every readable/controllable node wired up at once.
 - `example-motors.yaml` — the dual-mode Motors node (DC or stepper).
+- `example-pixels.yaml` — per-LED control of the Pixels strip (8 individual
+  Home Assistant lights via `partition`, plus addressable effects).
+- `example-vibro.yaml` — Vibro with intensity (strength) and duration (length)
+  number controls.
 
 ## Use it in your own project
 
@@ -65,7 +69,8 @@ sensor:
 - `modulino_buttons` — `binary_sensor` ×3 (buttons A/B/C).
 - `modulino_pixels` — `light`: 8-LED addressable RGB strip.
 - `modulino_buzzer` — `switch`: continuous tone at a configurable frequency.
-- `modulino_vibro` — `switch`: vibration motor on/off.
+- `modulino_vibro` — `switch`: vibration motor on/off, with optional `number`
+  controls for intensity (strength, %) and duration (length, ms; 0 = continuous).
 - `modulino_latch_relay` — `switch`: latching relay set/reset.
 - `modulino_motors` — dual-mode H-bridge: two DC channels (`number` speed +
   `sensor` current + `binary_sensor` busy) **or** one stepper (native ESPHome

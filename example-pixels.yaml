@@ -1,0 +1,76 @@
+# Modulino Pixels — per-LED control.
+#
+# modulino_pixels is an ESPHome *addressable* light (8 LEDs), so you can control
+# each LED individually. This example exposes:
+#   * one "Modulino Pixels" entity that sets the whole strip at once, with a few
+#     addressable effects, and
+#   * eight "Pixel 0".."Pixel 7" entities (via the `partition` platform), each
+#     controlling a single LED's colour + brightness in Home Assistant.
+esphome:
+  name: modulino-pixels
+  friendly_name: Modulino Pixels
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+
+ota:
+  - platform: esphome
+
+logger:
+
+light:
+  # Whole-strip light (all 8 LEDs). Set `internal: true` if you only want the
+  # per-LED entities below to appear in Home Assistant.
+  - platform: modulino_pixels
+    id: pixels_light
+    name: "Modulino Pixels"
+    effects:
+      - addressable_rainbow:
+      - addressable_scan:
+      - addressable_lambda:
+          name: "Traffic Light"
+          update_interval: 100ms
+          lambda: |-
+            it[0] = Color(255, 0, 0);
+            it[1] = Color(255, 200, 0);
+            it[2] = Color(0, 255, 0);
+
+  # One Home Assistant light per LED. The segment `id:` is the light above.
+  - platform: partition
+    name: "Pixel 0"
+    segments: [{ id: pixels_light, from: 0, to: 0 }]
+  - platform: partition
+    name: "Pixel 1"
+    segments: [{ id: pixels_light, from: 1, to: 1 }]
+  - platform: partition
+    name: "Pixel 2"
+    segments: [{ id: pixels_light, from: 2, to: 2 }]
+  - platform: partition
+    name: "Pixel 3"
+    segments: [{ id: pixels_light, from: 3, to: 3 }]
+  - platform: partition
+    name: "Pixel 4"
+    segments: [{ id: pixels_light, from: 4, to: 4 }]
+  - platform: partition
+    name: "Pixel 5"
+    segments: [{ id: pixels_light, from: 5, to: 5 }]
+  - platform: partition
+    name: "Pixel 6"
+    segments: [{ id: pixels_light, from: 6, to: 6 }]
+  - platform: partition
+    name: "Pixel 7"
+    segments: [{ id: pixels_light, from: 7, to: 7 }]

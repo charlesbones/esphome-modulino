@@ -224,9 +224,11 @@ public:
     uint8_t buf[3];
     auto res = read((uint8_t*)buf, 3);
     auto ret = res && (buf[0] != last_status[0] || buf[1] != last_status[1] || buf[2] != last_status[2]);
-    last_status[0] = buf[0];
-    last_status[1] = buf[1];
-    last_status[2] = buf[2];
+    if (res) {  // local patch: on a failed read buf is uninitialized; keep the last good state (report upstream)
+      last_status[0] = buf[0];
+      last_status[1] = buf[1];
+      last_status[2] = buf[2];
+    }
     return ret;
   }
   void setLeds(bool a, bool b, bool c) {
@@ -482,6 +484,19 @@ public:
   bool isPressed() {
     get();
     return _pressed;
+  }
+  // local patch: one read returning position + press and whether the read
+  // succeeded, so callers can skip failed reads (get() returns 0 on failure and
+  // isPressed() issues a second read). Report upstream.
+  bool getState(int16_t &position, bool &pressed) {
+    uint8_t buf[3];
+    if (!read(buf, 3)) {
+      return false;
+    }
+    _pressed = (buf[2] != 0);
+    pressed = _pressed;
+    position = buf[0] | (buf[1] << 8);
+    return true;
   }
   int8_t getDirection() {
     unsigned long now = millis();

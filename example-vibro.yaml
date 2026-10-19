@@ -1,0 +1,51 @@
+# Modulino Vibro with runtime control of strength and length.
+#
+# The switch turns the motor on/off; two number sliders in Home Assistant set:
+#   * Intensity (strength, 0–100 %)
+#   * Duration  (length, ms; 0 = vibrate continuously while the switch is on,
+#                >0 = a single pulse of that length, then the switch returns off)
+esphome:
+  name: modulino-vibro
+  friendly_name: Modulino Vibro
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+api:
+  encryption:
+    key: !secret api_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+logger:
+
+switch:
+  - platform: modulino_vibro
+    id: vibro1
+    name: "Vibro"
+
+number:
+  - platform: modulino_vibro
+    modulino_vibro_id: vibro1
+    type: intensity
+    name: "Vibro Intensity"
+    unit_of_measurement: "%"
+  - platform: modulino_vibro
+    modulino_vibro_id: vibro1
+    type: duration
+    name: "Vibro Duration"
+    unit_of_measurement: "ms"

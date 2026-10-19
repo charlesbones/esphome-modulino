@@ -23,7 +23,7 @@ void ModulinoMovementComponent::update() {
     if (!found_) return;
     ESP_LOGI(TAG, "Modulino Movement found");
   }
-  movement_.update();
+  if (!movement_.update()) return;  // skip stale values when the read fails
   if (accel_x_sensor_ != nullptr) accel_x_sensor_->publish_state(movement_.getX());
   if (accel_y_sensor_ != nullptr) accel_y_sensor_->publish_state(movement_.getY());
   if (accel_z_sensor_ != nullptr) accel_z_sensor_->publish_state(movement_.getZ());

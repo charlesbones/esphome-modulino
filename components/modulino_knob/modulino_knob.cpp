@@ -23,11 +23,14 @@ void ModulinoKnobComponent::update() {
     if (!found_) return;
     ESP_LOGI(TAG, "Modulino Knob found");
   }
+  int16_t position;
+  bool pressed;
+  if (!knob_.getState(position, pressed)) return;  // one read; skip a failed read
   if (position_sensor_ != nullptr) {
-    position_sensor_->publish_state(knob_.get());
+    position_sensor_->publish_state(position);
   }
   if (pressed_binary_sensor_ != nullptr) {
-    pressed_binary_sensor_->publish_state(knob_.isPressed() != 0);
+    pressed_binary_sensor_->publish_state(pressed);
   }
 }
 
