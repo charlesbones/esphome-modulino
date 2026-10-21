@@ -1,9 +1,12 @@
 #pragma once
 
 #include "esphome/core/component.h"
+#include "esphome/core/defines.h"
 #include "esphome/core/helpers.h"
 #include "esphome/components/switch/switch.h"
+#ifdef USE_NUMBER
 #include "esphome/components/number/number.h"
+#endif
 
 #include <Arduino_Modulino.h>
 
@@ -43,6 +46,10 @@ class ModulinoVibroSwitch : public switch_::Switch, public Component {
   uint32_t on_since_{0};
 };
 
+// The intensity/duration number is only compiled when the number component is
+// loaded (i.e. a number platform is configured); a switch-only config needs no
+// number support.
+#ifdef USE_NUMBER
 enum class ModulinoVibroNumberType : uint8_t { INTENSITY, DURATION };
 
 class ModulinoVibroNumber : public number::Number, public Parented<ModulinoVibroSwitch> {
@@ -53,6 +60,7 @@ class ModulinoVibroNumber : public number::Number, public Parented<ModulinoVibro
   void control(float value) override;
   ModulinoVibroNumberType type_{ModulinoVibroNumberType::INTENSITY};
 };
+#endif
 
 }  // namespace modulino_vibro
 }  // namespace esphome

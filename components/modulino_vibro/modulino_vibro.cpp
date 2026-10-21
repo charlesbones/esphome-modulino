@@ -86,6 +86,7 @@ void ModulinoVibroSwitch::dump_config() {
   }
 }
 
+#ifdef USE_NUMBER
 void ModulinoVibroNumber::control(float value) {
   if (type_ == ModulinoVibroNumberType::INTENSITY) {
     this->parent_->set_intensity(value);
@@ -94,6 +95,7 @@ void ModulinoVibroNumber::control(float value) {
   }
   this->publish_state(value);
 }
+#endif
 
 }  // namespace modulino_vibro
 }  // namespace esphome

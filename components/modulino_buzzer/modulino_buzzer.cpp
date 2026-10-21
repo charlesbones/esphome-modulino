@@ -59,7 +59,7 @@ void ModulinoBuzzerSwitch::loop() {
 
 void ModulinoBuzzerSwitch::dump_config() {
   ESP_LOGCONFIG(TAG, "Modulino Buzzer:");
-  ESP_LOGCONFIG(TAG, "  Frequency: %u Hz", frequency_);
+  ESP_LOGCONFIG(TAG, "  Frequency: %u Hz", (unsigned) frequency_);
   if (!found_) {
     ESP_LOGCONFIG(TAG, "  Communication with Modulino Buzzer failed!");
   }

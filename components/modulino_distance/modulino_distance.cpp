@@ -23,11 +23,11 @@ void ModulinoDistanceComponent::update() {
     if (!found_) return;
     ESP_LOGI(TAG, "Modulino Distance found");
   }
-  // available() refreshes the cached measurement and reports whether it is
-  // valid; get() returns the last distance in millimetres (NAN if out of range).
-  if (distance_.available()) {
-    this->publish_state(distance_.get());
-  }
+  // Refresh the reading, then publish it unconditionally: get() is NAN when
+  // nothing is in range, which Home Assistant shows as "unknown" rather than a
+  // stale distance.
+  distance_.available();
+  this->publish_state(distance_.get());
 }
 
 void ModulinoDistanceComponent::dump_config() {

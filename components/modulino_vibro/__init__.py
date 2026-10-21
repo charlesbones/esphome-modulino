@@ -1,10 +1,6 @@
 import esphome.codegen as cg
 from esphome.components import number, switch
 
-# The switch header pulls in the number domain, so a switch-only config (no
-# intensity/duration sliders) still compiles.
-AUTO_LOAD = ["number"]
-
 modulino_vibro_ns = cg.esphome_ns.namespace("modulino_vibro")
 
 # The switch owns the ModulinoVibro instance and the intensity/duration state;
