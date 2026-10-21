@@ -1,18 +1,19 @@
 # esphome-modulino
 
-ESPHome external components for the [Arduino Modulino](https://www.arduino.cc/education/modulino-nodes/)
+ESPHome external components for the [Arduino Modulino](https://store.arduino.cc/collections/modulino/)
 sensor/actuator nodes. Each component is a thin wrapper around Arduino's own
 [`Arduino_Modulino`](https://github.com/arduino-libraries/Arduino_Modulino)
 library — none of the I2C protocols are reimplemented — so the nodes drop
 straight into an ESPHome project and show up in Home Assistant.
 
-Targets the ESP32-S3 boards the Modulino ecosystem uses (Arduino Nano ESP32,
-UNO R4, etc.) under the `arduino` framework.
+#Tested tagets
+
+- Nano Esp32 + Nano connector carrier
 
 ## Quick start
 
-1. Install ESPHome (`pipx install esphome` or `pip install esphome`).
-2. Copy `secrets.yaml.example` to `secrets.yaml` and fill in your Wi-Fi.
+1. Install ESPHome.
+2. Createa new device based on your target.
 3. Edit one of the example configs to list the nodes you have, then:
 
 ```bash
@@ -80,9 +81,7 @@ sensor:
 - `modulino_led_matrix` — `display`: 12x8 monochrome matrix. Draw with a display
   lambda; scroll text or play animations by combining it with stock ESPHome
   `text`/`select` inputs (see `example-led-matrix.yaml`).
-
-Not implemented: `modulino_opto_relay`.
-
+  
 ### Refresh rate
 
 Every readable component polls at `update_interval` (default **60s**). Lower it
