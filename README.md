@@ -9,6 +9,8 @@ straight into an ESPHome project and show up in Home Assistant.
 Targets the ESP32-S3 boards the Modulino ecosystem uses (Arduino Nano ESP32,
 UNO R4, etc.) under the `arduino` framework.
 
+📖 **[Component reference](https://charlesbones.github.io/esphome-modulino/)** — full per-component config and options.
+
 ## Quick start
 
 1. Install ESPHome (`pipx install esphome` or `pip install esphome`).
