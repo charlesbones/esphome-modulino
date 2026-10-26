@@ -6,7 +6,9 @@ sensor/actuator nodes. Each component is a thin wrapper around Arduino's own
 library — none of the I2C protocols are reimplemented — so the nodes drop
 straight into an ESPHome project and show up in Home Assistant.
 
-#Tested tagets
+> A personal side project — not an official Arduino product. Community-supported, no warranty.
+
+## Tested targets
 
 - Nano Esp32 + Nano connector carrier
 
@@ -15,7 +17,7 @@ straight into an ESPHome project and show up in Home Assistant.
 ## Quick start
 
 1. Install ESPHome.
-2. Createa new device based on your target.
+2. Create a new device based on your target.
 3. Edit one of the example configs to list the nodes you have, then:
 
 ```bash
@@ -40,7 +42,7 @@ Point `external_components` at this repo instead of copying files:
 
 ```yaml
 external_components:
-  - source: github://YOUR_GITHUB_USERNAME/esphome-modulino@main
+  - source: github://charlesbones/esphome-modulino@main
 ```
 
 Or vendor it locally (what the examples do):
