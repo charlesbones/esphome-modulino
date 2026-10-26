@@ -10,6 +10,8 @@ straight into an ESPHome project and show up in Home Assistant.
 
 - Nano Esp32 + Nano connector carrier
 
+📖 **[Component reference](https://charlesbones.github.io/esphome-modulino/)** — full per-component config and options.
+
 ## Quick start
 
 1. Install ESPHome.
