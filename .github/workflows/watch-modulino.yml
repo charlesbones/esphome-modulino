@@ -1,0 +1,35 @@
+name: Watch Arduino_Modulino releases
+
+# Daily (and on demand) check: if arduino-libraries/Arduino_Modulino has a newer
+# release than the version vendored here, create a branch named after it. That
+# branch is the starting point for re-vendoring the library (drop in the new
+# src/, bump library.json) and testing the update.
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Branch if upstream is newer
+        run: |
+          current=$(python3 -c "import json; print(json.load(open('components/modulino/Arduino_Modulino/library.json'))['version'])")
+          latest=$(curl -fsSL https://api.github.com/repos/arduino-libraries/Arduino_Modulino/releases/latest \
+                   | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'].lstrip('v'))")
+          echo "vendored=$current upstream=$latest"
+          if [ -z "$latest" ] || [ "$latest" = "$current" ]; then
+            echo "Already on the latest release."; exit 0
+          fi
+          branch="modulino-$latest"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "Branch $branch already exists; nothing to do."; exit 0
+          fi
+          git switch -c "$branch"
+          git push origin "$branch"
+          echo "::notice::Created branch $branch for Arduino_Modulino $latest (vendored is $current)."
