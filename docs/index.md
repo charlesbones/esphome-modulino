@@ -1,6 +1,6 @@
 # esphome-modulino — component reference
 
-ESPHome external components for the [Arduino Modulino](https://www.arduino.cc/education/modulino-nodes/)
+ESPHome external components for the [Arduino Modulino](https://store.arduino.cc/collections/modulino)
 nodes. Each wraps Arduino's own `Arduino_Modulino` library. See the
 [repository README](https://github.com/charlesbones/esphome-modulino) for the
 project overview and how it works.
@@ -249,5 +249,3 @@ stepper:
 ```
 
 ---
-
-Not implemented: `modulino_opto_relay`.
